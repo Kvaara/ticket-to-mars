@@ -5,7 +5,6 @@ import (
 	"math"
 	"math/rand"
 	"strings"
-	"unicode/utf8"
 )
 
 const (
@@ -20,14 +19,22 @@ const (
 
 func main() {
 	// This would be an array:
-	// spacelines := []string{"Virgin Galactic", "SpaceX", "Space Adventures"}
+	// spacelines := [3]string{"Virgin Galactic", "SpaceX", "Space Adventures"}
 	// This is a dynamic slice:
 	spacelines := []string{"Virgin Galactic", "SpaceX", "Space Adventures"}
 
 	chosen_spacelines := generate_spacelines(spacelines, NUMBER_OF_TICKETS)
 	header := fmt.Sprintf("%-20s %-5s %-20s %s", "Spaceline", "Days", "Trip type", "Price")
 	fmt.Println(header)
-	fmt.Println(strings.Repeat("=", utf8.RuneCountInString(header)))
+	// We have to type cast the header into a slice of runes before calculating its length using the len() function.
+	// Why? Because len(string) returns the number of bytes not the number of characters (runes).
+	// So len("a") will always be 1, but len("ä") will always be 2 even though it's a single character.
+	// ASCII characters normally take 1 byte (8 bits) and Unicode characters take 2 bytes (16 bits) of memory.
+	// A string is an immutable sequence of bytes (1 byte equals 8 bits) and not a sequence of runes.
+	// A rune is an alias to int32 and denotes a unicode code point (e.g., the decimal unicode code point 83 equals 'S').
+	// So for the accurate numbers of "=" characters in the separator we have to type cast into a slice of runes.
+	// We could have used utf8.RuneCountInString function but the less packages, the better.
+	fmt.Println(strings.Repeat("=", len([]rune(header))))
 	for _, spaceline := range chosen_spacelines {
 		speed_and_cost := generate_speed_and_calculate_cost()
 		chosen_speed := speed_and_cost["chosen_speed"]
