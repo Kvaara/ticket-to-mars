@@ -33,6 +33,7 @@ func main() {
 	// A string is an immutable sequence of bytes (1 byte equals 8 bits) and not a sequence of runes.
 	// A rune is an alias to int32 and denotes a unicode code point (e.g., the decimal unicode code point 83 equals 'S').
 	// So for the accurate numbers of "=" characters in the separator we have to type cast into a slice of runes.
+	// See https://programming.guide/go/rune.html
 	// We could have used utf8.RuneCountInString function but the less packages, the better.
 	fmt.Println(strings.Repeat("=", len([]rune(header))))
 	for _, spaceline := range chosen_spacelines {
