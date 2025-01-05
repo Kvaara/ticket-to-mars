@@ -37,9 +37,7 @@ func main() {
 	// We could have used utf8.RuneCountInString function but the less packages, the better.
 	fmt.Println(strings.Repeat("=", len([]rune(header))))
 	for _, spaceline := range chosen_spacelines {
-		speed_and_cost := generate_speed_and_calculate_cost()
-		chosen_speed := speed_and_cost["chosen_speed"]
-		chosen_cost := speed_and_cost["chosen_cost"]
+		chosen_speed, chosen_cost := generate_speed_and_calculate_cost()
 		trip_type := generate_trip_type()
 		days := calculate_days(chosen_speed)
 
@@ -58,7 +56,7 @@ func generate_spacelines(spacelines []string, number_of_tickets int) []string {
 	return chosen_spacelines
 }
 
-func generate_speed_and_calculate_cost() map[string]float64 {
+func generate_speed_and_calculate_cost() (float64, float64) {
 	randomFactor := rand.Float64()
 
 	speed_interval := MAX_SPEED_IN_KMS - MIN_SPEED_IN_KMS
@@ -67,12 +65,7 @@ func generate_speed_and_calculate_cost() map[string]float64 {
 	cost_interval := MAX_COST_IN_MILLIONS - MIN_COST_IN_MILLIONS
 	chosen_cost := (randomFactor * cost_interval) + MIN_COST_IN_MILLIONS
 
-	speed_and_cost := map[string]float64{
-		"chosen_speed": chosen_speed,
-		"chosen_cost":  chosen_cost,
-	}
-
-	return speed_and_cost
+	return chosen_speed, chosen_cost
 }
 
 func generate_trip_type() string {
